@@ -6,6 +6,7 @@ import (
 	"net"
 	"sync"
 	"github.com/Felix12390/is105sem03/mycrypt"
+	"github.com/Felix12390/minyr/yr"
 )
 
 func main() {
@@ -41,7 +42,17 @@ func main() {
 					log.Println("Dekrypter melding: ", string(dekryptertMelding))
 					switch msg := string(dekryptertMelding); msg {
   				        case "ping":
-						_, err = c.Write([]byte("pong"))
+						//_, err = c.Write([]byte("pong"))
+						kryptertMelding := mycrypt.Krypter([]rune(string("pong")), mycrypt.ALF_SEM03, 4)
+						log.Println("Kryptert melding: ", string(kryptertMelding))
+						_, err = conn.Write([]byte(string(kryptertMelding)))
+					case "Kjevik;SN39040;18.03.2022 01:50;6":
+						newString, err := yr.CelsiusToFahrenheitLine("Kjevik;SN39040;18.03.2022 01:50;6")
+						if err != nil {
+							log.Fatal(err)
+						}
+						kryptertMelding := mycrypt.Krypter([]rune(string(newString)), mycrypt.ALF_SEM03, 4)
+						_, err = conn.Write([]byte(string(kryptertMelding)))
 					default:
 						_, err = c.Write(buf[:n])
 					}
